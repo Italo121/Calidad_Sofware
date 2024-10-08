@@ -1,0 +1,130 @@
+{% extends "app/base.html" %}
+
+{% load static %}
+
+{% block contenido %}
+
+    <div class="container py-3 " >
+        <div class="d-flex row justify-content-center ">
+            <h2 class="text-center">Destacado y recomendado</h2>
+
+            <div class="col-sm-6 bg-dark  justify-content-center">
+                <a href="{% url 'detalle_producto' 1 %}"> <img src=" {{ productos.0.imagen1.url}}" width="600" height="300" class="my-1 img-fluid"></a>
+                <h2>{{ productos.0.nombre}}</h2>
+            </div>
+
+            <div class="col-sm-4 bg-dark ">
+                <div class=" d-flex my-2 ">
+                 <img src=" {{ productos.0.imagen2.url}}" height="100" width="200" class="me-1 "> 
+                 <img src=" {{ productos.0.imagen3.url}}" height="100" width="200 " class="me-1">
+                </div>
+                <div class="d-flex">
+                 <img src=" {{ productos.0.imagen4.url}} " height="100" width="200" class="me-1 " >
+                 <img src=" {{ productos.0.imagen5.url}} " height="100" width="200" class="">
+                </div>
+                <div class="d-flex justify-content-end"> 
+                    <p>Acceso anticipado</p>
+                    <h5 class="mx-4"> ${{productos.0.precio}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container my-3 ">
+        <div class="row text-center">
+            <h2>Ofertas</h2>
+            <div class="d-flex  justify-content-center col-sm-12  bg-dark" style="border-radius: 1rem;">
+                <a href="{% url 'detalle_producto' 2 %}"><img class="img-fluid" src=" {{ productos.1.imagen1.url}}" width="500" height="300"> </a>
+                <a href="{% url 'detalle_producto' 3 %}"><img class="img-fluid" src=" {{ productos.2.imagen1.url}}" width="500" height="362" > </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-3">
+        <div class="row ">
+            <h2 class="text-center"> Exclusivos</h2>
+            <div class="col-sm-4 my-1">
+
+                <div class="card w-85 mb-3">
+                    <div class="card-body">
+                      <a href="{% url 'detalle_producto' 4 %}"><img src=" {{ productos.3.imagen1.url}}" class="card-img-top img-fluid" > </a>  
+                      <div class="d-flex justify-content-between mt-2">
+                        <h5 class="card-title ">{{ productos.3.nombre}}</h5>
+                        <form method="post" action="{% url 'agregar_al_carrito' 4 %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary me-2">Agregar al carrito</button>
+                        </form>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-4 my-1">
+
+                <div class="card w-85 mb-3">
+                    <div class="card-body">
+                      <a href="{% url 'detalle_producto' 5 %}"><img src=" {{ productos.4.imagen1.url}}" class="card-img-top " height="190"> </a>  
+                      <div class="d-flex justify-content-between mt-2">
+                        <h5 class="card-title ">{{ productos.4.nombre}}</h5>
+                        <form method="post" action="{% url 'agregar_al_carrito' 5 %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary me-2">Agregar al carrito</button>
+                        </form>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-4 my-1">
+                
+                <div class="card w-85 mb-3">
+                    <div class="card-body">
+                      <a href="{% url 'detalle_producto' 6 %}"><img src=" {{ productos.5.imagen1.url}}" class="card-img-top " wiht="315" height="190"> </a>  
+                      <div class="d-flex justify-content-between mt-2">
+                        <h5 class="card-title ">{{ productos.5.nombre}}</h5>
+                        <form method="post" action="{% url 'agregar_al_carrito' 6 %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary me-2">Agregar al carrito</button>
+                        </form>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+    </div>
+{% load humanize %}
+    {% for p in productos %}
+
+        <div class="container pt-3"> 
+            <div class="d-flex row bg-dark me-5 mx-1 " style="border-radius: 1rem;">
+        
+            <div class="col-sm-4 mt-2">
+                <a href="{% url 'detalle_producto' p.id %}">  <img src="{{ p.imagen1.url}} " width="400" height="200" class="img-fluid"> </a>
+            </div>
+        
+            <div class="col-sm-4">
+                <div class="my-2">
+                    <h3> {{ p.nombre}}</h3>
+                    <p> Sony</p>
+                    <p> Plataforma</p>
+                </div>
+            </div>
+        
+            <div class="col-sm-4 d-flex justify-content-end">
+                <div class="my-5">
+                <h2>${{p.precio | intcomma}}</h2>
+                </div>
+                <div class="my-5 mx-4">
+                    <form method="post" action="{% url 'agregar_al_carrito' p.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary me-2">Agregar al carrito</button>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+    {% endfor %}
+
+
+
+{% endblock%}

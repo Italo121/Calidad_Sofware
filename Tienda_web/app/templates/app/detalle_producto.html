@@ -1,0 +1,42 @@
+{% extends "app/base.html" %}
+
+{% load static %}
+
+{% block contenido %}
+<div class="container pt-3">
+    <div class="container bg-dark text-white " style="border-radius: 1rem;">
+        <h1 class="text-center pt-1">  {{ producto.nombre}}</h1>
+        <div class="row p-2">
+            <img class="col-sm-8 img-fluid" src="{{ producto.imagen1.url }}" width="300" height="400">
+            <p class="col-sm-4 mt-2"> 
+                {{ producto.descripcion}}
+                <br>
+
+                {{ producto.marca.nomb_marca}}
+            </p>
+            <div>
+                <p></p>
+            </div>
+            <div class="d-flex">
+                <button type="submit" class="btn btn-primary me-2">Comprar</button>
+                <form method="post" action="{% url 'agregar_al_carrito' producto.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary ms-2">Agregar al carrito</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <h1> Juegos relacionados</h1>
+        <div class="row p-3 bg-dark text-white" style="border-radius: 1rem;">
+            <a href="{% url 'detalle_producto' producto1.id %}" class="col-sm-4 "> <img src="{{ producto1.imagen1.url }}" height="200" width="400" class="img-fluid my-1">
+            </a>
+            <a href="{% url 'detalle_producto' producto2.id %}" class="col-sm-4 "> <img src="{{ producto2.imagen1.url }}" height="200" width="400" class="img-fluid my-1">
+            </a>
+            <a href="{% url 'detalle_producto' producto3.id %}" class="col-sm-4 "> <img src="{{ producto3.imagen1.url }}" height="200" width="400" class="img-fluid my-1">
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "app/base.html" %}
+
+{% load static %}
+
+{% block contenido %}
+
+<main class="container pt-3">
+    <h2 class="text-center">Carrito de compras</h2>
+{% if items %}
+    <div class="row justify-content-center pt-3 ">
+        <div class="justify-content-between text-white d-flex"> 
+            <h3 class="ms-3"> Juego</h3>
+            <h3> Cantidad </h3>
+            <h3 class="me-3"> Precio</h3>
+        </div>
+    {% for detalle in items %}
+        <div class="col-sm-12 col-sm-8 pt-2">
+            <div class="p-3 text-white d-flex justify-content-between bg-dark rounded align-items-center ">
+                 
+                
+
+                <h3> {{ detalle.producto.nombre }}</h3>
+
+                <div class="d-flex align-items-center quantity-controls m-3">
+
+                    <form method="post" action="{% url 'agregar_al_carrito' detalle.producto.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success btn-sm me-1">+</button>
+                    </form>
+                    <form method="post" action="{% url 'quitar_del_carrito' detalle.producto.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm me-1">-</button>
+                    </form>
+                    <h3 class="me-1 mt-2"> {{ detalle.cantidad_productos }}</h3>
+                </div>
+
+                <div >
+                    <h3>${{ detalle.producto.precio }}</h3>
+                </div>
+
+            </div>
+        </div>
+     {% endfor %}
+    </div>
+
+    <div class="container pt-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <a class="btn btn-primary m-3" href="#" role="button">Pagar todo</a>
+            <h5>Total: ${{ order.get_total }}</h5>
+        </div>
+    </div>
+{% else %}
+    <div class="p-3 text-white justify-content-center bg-dark rounded align-items-center">
+        <h1>Tu carrito está vacío.</h1>
+        <a href="{% url 'index' %}">Volver a la tienda</a>
+    <div>
+{% endif %}
+</main>
+
+{% endblock%}
