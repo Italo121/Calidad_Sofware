@@ -13,7 +13,7 @@ def index(request ):
     return render(request, 'app/index.html',data) 
 
 def carrito(request):
-    order, created = Boleta.objects.get_or_create(cliente=request.user, completada=False)
+    order, created = Boleta.objects.get_or_create(cliente=1, completada=False)
     items = order.detalle_boleta_set.all()
     items_carrito = order.get_item  # Asegúrate de tener este método o propiedad definido en el modelo Boleta
 
@@ -26,7 +26,7 @@ def carrito(request):
 
 def agregar_al_carrito(request, producto_id):
     producto = get_object_or_404(Producto, id=producto_id)
-    order, created = Boleta.objects.get_or_create(cliente=request.user, completada=False)
+    order, created = Boleta.objects.get_or_create(cliente=1, completada=False)
     detalle_orden, created = Detalle_boleta.objects.get_or_create(boleta=order, producto=producto)
     detalle_orden.cantidad_productos += 1
     detalle_orden.save()
@@ -35,7 +35,7 @@ def agregar_al_carrito(request, producto_id):
 
 def quitar_del_carrito(request, producto_id):
     producto = get_object_or_404(Producto, id=producto_id)
-    order = Boleta.objects.get(cliente=request.user, completada=False)
+    order = Boleta.objects.get(cliente=1, completada=False)
     detalle_orden = Detalle_boleta.objects.get(boleta=order, producto=producto)
     if detalle_orden.cantidad_productos > 1:
         detalle_orden.cantidad_productos -= 1
@@ -46,7 +46,7 @@ def quitar_del_carrito(request, producto_id):
 
 
 def ver_carrito(request):
-    order = Boleta.objects.filter(cliente=request.user, completada=False).first()
+    order = Boleta.objects.filter(cliente=1, completada=False).first()
     context = {
         'order': order
     }
@@ -57,7 +57,7 @@ def actualizarCarrito(request):
     productId = data['productId']
     action = data['action']
     producto = Producto.objects.get(id=productId)
-    order,creada = Boleta.objects.get_or_create(cliente=request.user,completada=False)
+    order,creada = Boleta.objects.get_or_create(cliente=1,completada=False)
     detalle_orden,creada = Detalle_boleta.objects.get_or_create(boleta=order,producto=producto)
     if action == 'add':
         if detalle_orden.cantidad_productos < producto.stock: 
