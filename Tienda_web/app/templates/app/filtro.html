@@ -14,28 +14,69 @@
   </form>
 
   <div>
-        <form method="GET" action="{% url 'filtro' %}" class="mb-3 row">
-            <div class="input-group-sm col-sm-6">
-                <select name="marca" class="form-select">
-                    <option value="">Seleccione marca</option>
-                    {% for marca in marcas %}
-                    <option value="{{ marca.id }}">{{ marca.nomb_marca }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit" class="btn btn-secondary">Buscar por Marca</button>
+    <form method="GET" action="{% url 'filtro' %}">
+      <select name="categoria" class="form-select">
+          <option value="">Seleccionar categoría</option>
+          {% for categoria in categorias %}
+              <option value="{{ categoria.id }}">{{ categoria.nomb_categoria }}</option>
+          {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary pt-1">Buscar</button>
+    </form>
+  </div>
+
+  <div>
+    <form method="GET" action="{% url 'filtro' %}">
+      <h3 class="text-center"> Caracteristicas </h3>
+      <div class="d-flex justify-content-between ">
+        <select name="color" class="form-select">
+            <option value="" class="me-1">Seleccionar color</option>
+            <option value="rojo" class="me-1">Rojo</option>
+            <option value="verde" class="me-1">Verde</option>
+            <option value="azul" class="me-1">Azul</option>
+            <option value="negro">Negro</option>
+        </select>
+
+        <select name="material" class="form-select">
+            <option value="">Seleccionar material</option>
+            <option value="plomo">Plomo</option>
+            <option value="cobre">Cobre</option>
+            <option value="aluminio">Aluminio</option>
+            <option value="plastico">Plástico</option>
+        </select>
+
+        <select name="bluetooth" class="form-select">
+            <option value="">Seleccionar opción Bluetooth</option>
+            <option value="con bluetooth">Con Bluetooth</option>
+            <option value="sin bluetooth">Sin Bluetooth</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary pt-1">Buscar</button>
+    </form>
+  </div>
+  <br>
+  <div>
+    <form method="GET" action="{% url 'filtro' %}" class="mb-3 row">
+        <div class="input-group-sm col-sm-6">
+            <select name="marca" class="form-select">
+                <option value="">Seleccione marca</option>
+                {% for marca in marcas %}
+                <option value="{{ marca.id }}">{{ marca.nomb_marca }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-secondary">Buscar por Marca</button>
+        </div>
+        <div class="col-sm-6 d-flex">
+            <div class="col-sm-6">
+              <input type="number" name="min_precio" placeholder="Precio mínimo" class="form-control" aria-label="Precio mínimo">
+              <button type="submit" class="btn btn-sm btn-warning">Buscar por Precio</button>
             </div>
-            <div class="col-sm-6 d-flex">
-                <div class="col-sm-6 ">
-                  <input type="number" name="min_precio" placeholder="Precio mínimo" class="form-control" aria-label="Precio mínimo">
-                  <button type="submit" class="btn btn-sm btn-warning">Buscar por Precio</button>
-                </div>
-                <div class="col-sm-6 ms-2">
-                  <input type="number" name="max_precio" placeholder="Precio máximo" class="form-control" aria-label="Precio máximo">
-                </div>
-            
-              </div>
-        </form>
-   </div>
+            <div class="col-sm-6 ms-2">
+              <input type="number" name="max_precio" placeholder="Precio máximo" class="form-control" aria-label="Precio máximo">
+            </div>
+        </div>
+    </form>
+  </div>
 
   <ul class="list-unstyled">
     {% for producto in productos %}

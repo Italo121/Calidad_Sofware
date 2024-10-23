@@ -1,10 +1,11 @@
 from django.shortcuts import render , get_object_or_404 , redirect 
-from .models import Producto , Boleta , Detalle_boleta , Marca
+from .models import Producto , Boleta , Detalle_boleta , Marca , Caracterista , Categoria
 from django.http import JsonResponse 
 import json
 
 # Create your views here.
 
+# Vista principal
 def index(request ):
     productos = Producto.objects.all()
     data = {
@@ -12,10 +13,11 @@ def index(request ):
     }
     return render(request, 'app/index.html',data) 
 
+# Vista del carrito
 def carrito(request):
-    order, created = Boleta.objects.get_or_create(cliente=1, completada=False)
+    order, created = Boleta.objects.get_or_create(cliente=request.user, completada=False)
     items = order.detalle_boleta_set.all()
-    items_carrito = order.get_item  # Asegúrate de tener este método o propiedad definido en el modelo Boleta
+    items_carrito = order.get_item  
 
     data = {
         'order': order, 
@@ -52,6 +54,7 @@ def ver_carrito(request):
     }
     return render(request, 'carrito.html', context)
 
+# funcion Para actualizar los cambias del carrito
 def actualizarCarrito(request):
     data = json.loads(request.body)
     productId = data['productId']
@@ -72,11 +75,12 @@ def actualizarCarrito(request):
         detalle_orden.delete()
     return JsonResponse("Carrito actualizado",safe=False) 
 
+# vista del detalle del producto
 def detalle_producto(request,id):
     producto=get_object_or_404(Producto,id=id)
-    producto1=get_object_or_404(Producto,id=4)
+    producto1=get_object_or_404(Producto,id=2)
     producto2=get_object_or_404(Producto,id=3)
-    producto3=get_object_or_404(Producto,id=5)
+    producto3=get_object_or_404(Producto,id=4)
     datos = {
 
         "producto":producto,
@@ -86,6 +90,7 @@ def detalle_producto(request,id):
     }
     return render(request, 'app/detalle_producto.html',datos )
 
+# Vista para la busqueda de productos por filtro
 def filtro(request):
     query = request.GET.get('q')
     marca_id = request.GET.get('marca')
@@ -93,6 +98,7 @@ def filtro(request):
     max_precio = request.GET.get('max_precio')
 
     productos = Producto.objects.all()
+   
 
     if query:
         productos = productos.filter(nombre__icontains=query)
@@ -104,12 +110,35 @@ def filtro(request):
 
     if max_precio:
         productos = productos.filter(precio__lte=max_precio)
+    
+    categorias = Categoria.objects.all()
+    
+    categoria_id = request.GET.get('categoria', '')
+    if categoria_id.isdigit():
+        productos = productos.filter(categoria_id=categoria_id)
 
-    # Obtener todas las marcas para el formulario
+    # Filtrar por color
+    color = request.GET.get('color', '')
+    if color:
+        productos = productos.filter(caracterista__color=color)
+
+    # Filtrar por material
+    material = request.GET.get('material', '')
+    if material:
+        productos = productos.filter(caracterista__material=material)
+
+    # Filtrar por bluetooth
+    bluetooth = request.GET.get('bluetooth', '')
+    if bluetooth:
+        productos = productos.filter(caracterista__bluetooth=bluetooth)
+
     marcas = Marca.objects.all()
 
     context = {
         'productos': productos,
         'marcas': marcas,
+        'categorias': categorias
     }
     return render(request, 'app/filtro.html', context)
+
+

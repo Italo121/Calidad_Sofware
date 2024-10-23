@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class Categoria (models.Model):
+    nomb_categoria = models.CharField( max_length=50)
+
 class Marca(models.Model):
     nomb_marca = models.CharField( max_length=50)
 
@@ -18,10 +21,39 @@ class Producto(models.Model):
     imagen4 = models.ImageField( upload_to='add_producto', null=True)
     imagen5 = models.ImageField( upload_to='add_producto', null=True)
     marca = models.ForeignKey(Marca ,on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria , on_delete= models.CASCADE)
     def __str__(self) :
         return self.nombre
+
+class Caracterista(models.Model):
+
+    COLORES = [
+            ('rojo', 'Rojo'),
+            ('verde', 'Verde'),
+            ('azul', 'Azul'),
+            ('negro', 'Negro')
+        ]
+    
+    MATERIALES = [
+            ('plomo', 'Plomo'),
+            ('cobre', 'Cobre'),
+            ('aluminio', 'Aluminio'),
+            ('plastico', 'Plastico')
+        ]
+    
+    BLUETOOTH = [
+            ('con bluetooth', 'Con Bluetooth'),
+            ('sin bluetooth', 'Sin Bluetooth')
+        ]
+
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    color = models.CharField(max_length=50 ,choices= COLORES , default='negro')
+    material = models.CharField(max_length=50 , choices=MATERIALES , default='plastico')
+    bluetooth = models.CharField( max_length = 50 , choices=BLUETOOTH , default='con bluetooth')
+    
     
 class Boleta (models.Model):
+    
     ESTADOS_BOLETA = [
             ('pendiente', 'Pendiente'),
             ('enviado', 'Enviado'),
