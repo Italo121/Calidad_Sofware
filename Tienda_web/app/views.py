@@ -2,14 +2,17 @@ from django.shortcuts import render , get_object_or_404 , redirect
 from .models import Producto , Boleta , Detalle_boleta , Marca , Caracterista , Categoria
 from django.http import JsonResponse 
 import json
+from django.contrib.auth.models import User
 
 # Create your views here.
 
 # Vista principal
 def index(request ):
     productos = Producto.objects.all()
+    usuario=get_object_or_404(User,id=1)
     data = {
-        'productos': productos
+        'productos': productos,
+        'usuario' : usuario
     }
     return render(request, 'app/index.html',data) 
 
